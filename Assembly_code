@@ -1,0 +1,51 @@
+0 3 //N
+1 0 //j-loop controller
+2 0 //resx
+3 0 //resy
+4 0 //resx^2
+5 0 //resy^2
+6 0 //magnitude of resultant
+7 0 //decimal part of value of resultant
+8 9 //temp-to store memory location of the starting of the vector
+9 104 //x0
+10 105 //x1
+11 106 //x2
+12 0 //x3
+13 0 //x4
+14 0 //buffer space for extra x components
+15 0
+16 0
+17 0
+18 0
+19 30 //y0
+20 31 //y1
+21 32 //y2
+22 0 //y3
+23 0 //y4
+24 0 //buffer space for extra y components
+25 0
+26 0
+27 0
+28 0
+29 10 //a variable which stores 10
+30 LOAD M(0), DEC //
+31 STOR M(1), NOP // j=N-1
+32 LOAD M(1), JUMP+ M(34,0:19) //if N==0 => j==-1 so next instruction halt is executed and program terminates
+33 HALT, NOP //
+34 LOAD M(2), ADD M(9) //
+35 STOR M(2), NOP //resx = resx+xi
+36 LOAD M(3), ADD M(19) //
+37 STOR M(3), NOP //res y= resy+yi
+38 LOAD M(0), SUB M(1) //AC=N-j
+39 ADD M(8), STOR M(34,28:39) // AC=AC+temp, changing the address to the next xi
+40 ADD M(29), NOP //
+41 STOR M(36,28:39), NOP // AC=AC+2*N, changing the address to the next yi
+42 LOAD M(1), DEC //
+43 STOR M(1), NOP //j=j-1
+44 JUMP+ M(34,0:19), NOP //while(j>=0)
+45 SQUARE M(2), STOR M(4) //resx^2=resx**2
+46 SQUARE M(3), STOR M(5) //resy^2=resy**2
+47 LOAD M(4), ADD M(5) //AC=resx^2+resy^2
+48 SQRT, STOR M(6) //computing square root of value stored in AC, storing int part in AC and dec part in MQ, int_val_of_mag_of_res=AC
+49 LOAD MQ, STOR M(7) //dec_val_of_mag_of_res=MQ
+50 HALT, NOP //
